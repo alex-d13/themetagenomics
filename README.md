@@ -42,9 +42,9 @@ version 2.14.1., 2017.](http://mc-stan.org)
 # To install the release version of Themetagenomics:
 install.packages('themetagenomics')
 
-# To install the developmental version via Github:
+# To install this forked developmental version via Github:
 # install.packages('devtools')
-devtools::install_github('EESI/themetagenomics',build_vignettes=TRUE)
+devtools::install_github('alex-d13/themetagenomics',build_vignettes=TRUE)
 ```
 
 ## Development
