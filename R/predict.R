@@ -9,7 +9,7 @@
 #' @param reference A string for either gg_ko, gg_cog, or silva_ko.
 #' Defaults to gg_ko.
 #' @param reference_path Folder path of the reference file
-#' @param scalar Value for scaling the topics over taxa distribution
+#' @param scalar Value for scaling the topics over taxa distrubution
 #'   to predicted counts. Defaults to 100.
 #' @param cn_normalize Logical flag for performing 16S rRNA copy number
 #'   normalization. Defaults to FALSE.
@@ -62,9 +62,9 @@ predict.topics <- function(object,
                            scalar=100,
                            cn_normalize=FALSE,sample_normalize=FALSE,
                            drop=TRUE,...){
-
+  
   reference <- match.arg(reference)
-
+  
   if (cn_normalize){
     if (attr(object,'cnn')){
       warning('Copy numbers already normalized via prepare_data. Switching cn_normalize to FALSE.')
@@ -75,20 +75,20 @@ predict.topics <- function(object,
       warning('Copy numbers have yet to be normalized. Conisdering cn_normalize=TRUE.')
     }
   }
-
+  
   fit <- object$fit
-
+  
   beta <- round(scalar*exp(fit$beta$logbeta[[1]]))
   rownames(beta) <- paste0('T',1:nrow(beta))
   colnames(beta) <- fit$vocab
-
+  
   if (grepl('gg',reference))
     predictions <- picrust(beta,rows_are_taxa=FALSE,
                            reference=reference,reference_path=reference_path,
                            cn_normalize=cn_normalize,
                            sample_normalize=sample_normalize,
                            drop=drop)
-
+  
   if (grepl('silva',reference))
     predictions <- t4f(beta,rows_are_taxa=FALSE,
                        tax_table=object$tax_table,
@@ -97,9 +97,9 @@ predict.topics <- function(object,
                        sample_normalize=sample_normalize,
                        scalar=scalar,
                        drop=drop,...)
-
+  
   predictions[['seeds']] <- object$seeds
-
+  
   class(predictions) <- 'functions'
   if (grepl('ko\\_',reference_path)){
     attr(predictions,'method') <- 'PICRUSt'
@@ -123,8 +123,8 @@ predict.topics <- function(object,
   }else{
     attr(predictions,'cnn') <- TRUE
   }
-
+  
   return(predictions)
-
+  
 }
 

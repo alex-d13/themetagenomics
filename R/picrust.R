@@ -50,40 +50,40 @@ NULL
 
 picrust <- function(otu_table,rows_are_taxa,reference=c('gg_ko','gg_cog'),reference_path,
                     cn_normalize=FALSE,sample_normalize=FALSE,drop=TRUE){
-
+  
   reference <- match.arg(reference)
-
+  
   if (rows_are_taxa == TRUE) otu_table <- t(otu_table)
-
+  
   if (cn_normalize) otu_table <- cnn(otu_table,rows_are_taxa=FALSE,drop=drop)
-
+  
   if (reference == 'gg_ko') ref_fn <- 'ko_13_5_precalculated.tab.gz'
   if (reference == 'gg_cog') ref_fn <- 'cog_13_5_precalculated.tab.gz'
-
+  
   out <- picrust_otu(file.path(reference_path,ref_fn,fsep=platform_sep()),colnames(otu_table))
   fxn_mapping <- out$genome_table_out
   rownames(fxn_mapping) <- out$matches
   colnames(fxn_mapping) <- out$gene_ids
-
+  
   overlap <- intersect(rownames(fxn_mapping),colnames(otu_table))
   otu_table <- otu_table[,overlap]
   fxn_mapping <- fxn_mapping[overlap,]
-
+  
   fxn_table <- round(otu_table %*% fxn_mapping)
   fxn_meta <- format_gene_metadata(out)
   pi_meta <- out$pimeta_table_out
   rownames(pi_meta) <- colnames(otu_table)
   colnames(pi_meta) <- out$pimeta_ids
-
+  
   if (drop){
     fxn_table <- fxn_table[,colSums(fxn_table)>0]
     fxn_meta <- lapply(fxn_meta,function(x) x[colnames(fxn_table)])
   }
-
+  
   if (sample_normalize) fxn_table <- fxn_table/rowSums(fxn_table)
-
+  
   predictions <- list(fxn_table=fxn_table,fxn_meta=fxn_meta,method_meta=pi_meta)
-
+  
   return(predictions)
-
+  
 }
