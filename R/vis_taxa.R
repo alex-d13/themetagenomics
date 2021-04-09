@@ -521,8 +521,12 @@ vis.taxa <- function(object,taxa_bar_n=30,top_n=7,method=c('huge','simple'),corr
 }
 
 #credit to themetagenomics vis_taxa.R
+#this function is needed to generate the objects and values used in the namco GUI
+#returns list with named values
+#input: object = topic_effects_object, which is created with the themetagenomics::est() function
+
 #' @export
-prepare_vis <- function(object,taxa_bar_n=30,top_n=7,method='huge',corr_thresh=.01,lambda_step=.01,...){
+prepare_vis2 <- function(object,taxa_bar_n=30,top_n=7,method='huge',corr_thresh=.01,lambda_step=.01,...){
   
   topics <- object$topics
   topic_effects <- object$topic_effects
